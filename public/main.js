@@ -28,6 +28,7 @@ $(document).ready(function() {
         };
 
 	getMarkers();	
+	initFireBase();
 
 	function getMarkers() {
 		console.log('getMarkers');
@@ -76,6 +77,34 @@ $(document).ready(function() {
 			}
 			window.setTimeout(getMarkers,INTERVAL);
 		}, "json");
+	}
+
+	function initFireBase(){
+		var config = {
+			apiKey: "AIzaSyC6WlkkbBGftmYFWI2fFs7D0-QUE8rk5-4",
+			authDomain: "dtc-fk-939.firebaseapp.com",
+			databaseURL: "https://dtc-fk-939.firebaseio.com",
+			storageBucket: "dtc-fk-939.appspot.com",
+			projectId: "dtc-fk-939",
+			messagingSenderId: "197697105052"
+		  };
+		  firebase.initializeApp(config);
+		
+		  window.dtc = firebase.database();
+	}
+
+	var writeUserData = function (goferId, location) {
+		firebase.database().ref('gofers/' + goferId).update({
+		  id: goferId,
+		  currentLoc: location,
+		});
+	}
+	
+	var subscribeToChanges = function(){
+		var myRef = firebase.database().ref('gofers/');
+		myRef.on('value', function(snapshot) {
+			console.log(snapshot.val())
+		});
 	}
 	
 })
