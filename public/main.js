@@ -2,10 +2,10 @@ $(document).ready(function() {
 
 	//Time between marker refreshes
 	var INTERVAL = 2000;
-	
+
 	//Used to remember markers
 	var markerStore = {};
-	
+
 	var myLatlng = new google.maps.LatLng(30.2353412,-92.010498);
     var myOptions = {
         zoom: 13,
@@ -27,7 +27,7 @@ $(document).ready(function() {
           }
         };
 
-	getMarkers();	
+	getMarkers();
 
 	function getMarkers() {
 		console.log('getMarkers');
@@ -52,20 +52,14 @@ $(document).ready(function() {
 					// 	},
 					// 	map_icon_label: '<span class="map-icon map-icon-point-of-interest"></span>',
 					// 	map:map
-					// });	
-					// 
+					// });
+					//
 					var marker = new mapIcons.Marker({
 						map: map,
 						position: new google.maps.LatLng(res[i].position.lat,res[i].position.long),
-						title:res[i].name,
-						icon: {
-							path: mapIcons.shapes.SQUARE_PIN,
-							fillColor: '#00CCBB',
-							fillOpacity: 1,
-							strokeColor: 'red',
-							strokeWeight: 0
-						},
-						map_icon_label: '<span class="map-icon map-icon-motobike-trail"></span>'
+					
+						icon: iconBase + 'parking_lot_maps.png'
+						//map_icon_label: '<span class="map-icon map-icon-motobike-trail"></span>'
 					});
 					markerStore[res[i].id] = marker;
 
@@ -77,5 +71,5 @@ $(document).ready(function() {
 			window.setTimeout(getMarkers,INTERVAL);
 		}, "json");
 	}
-	
+
 })

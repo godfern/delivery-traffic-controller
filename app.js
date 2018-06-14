@@ -7,8 +7,8 @@ var markerData = require('./markerData.js');
 app.use('/static', express.static(__dirname + "/public",{maxAge:86400000}));
 
 app.get('/', function(req, res) {
-	
-	res.sendfile(__dirname+"/views/index.html");
+
+	res.sendfile(__dirname+"/views/index1.html");
 });
 
 app.get('/markers', function(req, res) {
