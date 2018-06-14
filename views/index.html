@@ -23,6 +23,7 @@ body{height:100%;margin:0px;font-family: Helvetica,Arial;}
   var position;
   var marker = [];
   var polyline = [];
+  
   var poly2 = [];
   var poly = null;
   var startLocation = [];
@@ -38,19 +39,27 @@ body{height:100%;margin:0px;font-family: Helvetica,Arial;}
   var nextPanoId;
   
   var startLoc = new Array();
-  startLoc[0] = 'rio claro, trinidad';
-  startLoc[1] = 'preysal, trinidad';
-  startLoc[2] = 'san fernando, trinidad';
-  startLoc[3] = 'couva, trinidad';
+  startLoc[0] = '12.9314472,77.6950325';
+//   startLoc[1] = '12.9306147,77.6899482';
+//   startLoc[2] = '12.9303388,77.6887636';
+//   startLoc[3] = '12.930297,77.6896364';
 
   var endLoc = new Array();
-  endLoc[0] = 'princes town, trinidad';
-  endLoc[1] = 'tabaquite, trinidad';
-  endLoc[2] = 'mayaro, trinidad';
-  endLoc[3] = 'arima, trinidad';
+  endLoc[0] = '12.928399,77.6879577';
+//   endLoc[1] = '12.9281472,77.6884221';
+//   endLoc[2] = '12.9306147,77.6899482';
+//   endLoc[3] = '12.9314472,77.6950325';
+
+  var strokeColor = new Array();
+  strokeColor[0] = 'black';
+  strokeColor[1] = 'yellow';
+  strokeColor[2] = 'blue';
+  strokeColor[3] = 'green';
 
 
-  var Colors = ["#FF0000", "#00FF00", "#0000FF"];
+
+
+//   var Colors = ["#FF0000", "#00FF00", "#0000FF"];
 
   var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   var labelIndex = 0;
@@ -58,16 +67,19 @@ function initialize() {
 
   infowindow = new google.maps.InfoWindow(
     { 
-      size: new google.maps.Size(150,50)
+      size: new google.maps.Size(550,150)
     });
 
+    var myLatlng = new google.maps.LatLng(12.9268202, 77.6922076);
+
     var myOptions = {
-      zoom: 16,
+        center: myLatlng,
+        zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-    address = 'Trinidad and Tobago'
+    address = '12.9298805,77.6907777,'
     geocoder = new google.maps.Geocoder();
     geocoder.geocode( { 'address': address}, function(results, status) {
      map.fitBounds(results[0].geometry.viewport);
@@ -116,10 +128,19 @@ function setRoutes(){
     var request = {
         origin: startLoc[i],
         destination: endLoc[i],
-        travelMode: travelMode
+        travelMode: travelMode,
+        waypoints: [
+          {
+            location: new google.maps.LatLng(12.9295876, 77.6923302),
+            stopover: true
+          },
+          {
+            location: new google.maps.LatLng(12.9299929, 77.6919232),
+            stopover: true
+          }
+        ]
     };
-//        createMarker(new google.maps.startLoc[i], 'A', 'START');
-//        createMarker(endLoc[i], '-A', 'END');
+
 
         directionsService.route(request,makeRouteCallback(i,directionsDisplay[i]));
 
@@ -143,13 +164,13 @@ function setRoutes(){
 
             polyline[routeNum] = new google.maps.Polyline({
             path: [],
-            strokeColor: '#FFFF00',
+            strokeColor: strokeColor[routeNum],
             strokeWeight: 3
             });
 
             poly2[routeNum] = new google.maps.Polyline({
             path: [],
-            strokeColor: '#FFFF00',
+            strokeColor: strokeColor[routeNum],
             strokeWeight: 3
             });     
 
@@ -247,7 +268,7 @@ function startAnimation(index) {
         eol[index]=polyline[index].Distance();
         map.setCenter(polyline[index].getPath().getAt(0));
 
-        poly2[index] = new google.maps.Polyline({path: [polyline[index].getPath().getAt(0)], strokeColor:"#FFFF00", strokeWeight:3});
+        poly2[index] = new google.maps.Polyline({path: [polyline[index].getPath().getAt(0)], strokeWeight:3});
 
         timerHandle[index] = setTimeout("animate("+index+",50)",2000);  // Allow time for the initial map display
 }
