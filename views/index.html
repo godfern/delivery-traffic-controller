@@ -39,49 +39,46 @@ body{height:100%;margin:0px;font-family: Helvetica,Arial;}
   var nextPanoId;
   
   var startLoc = new Array();
-  startLoc[0] = '12.934604,77.6905293';
-  startLoc[1] = '12.9280701,77.6891265';
-  startLoc[2] = '12.9224928,77.6874592';
-  startLoc[3] = '12.9249175,77.6737694';
-  startLoc[4] = '12.9180055,77.694068';
+  startLoc[0] = '12.9269165,77.693235';
+//   startLoc[1] = '12.9212516,77.652125';
+//   startLoc[1] = '12.9280701,77.6891265';
+//   startLoc[2] = '12.9224928,77.6874592';
+//   startLoc[3] = '12.9249175,77.6737694';
+//   startLoc[4] = '12.9180055,77.694068';
 
   var endLoc = new Array();
-  endLoc[0] = '12.9283843,77.6940812';
-  endLoc[1] = '12.9269326,77.6891817';
-  endLoc[2] = '12.9296516,77.6886793';
-  endLoc[3] = '12.9291333,77.6871585';
-  endLoc[4] = '12.9200267,77.6961266';
+  endLoc[0] = '12.9321549,77.696325';
+//   endLoc[1] = '12.9123035,77.6483407';
+//   endLoc[1] = '12.9269326,77.6891817';
+//   endLoc[2] = '12.9296516,77.6886793';
+//   endLoc[3] = '12.9291333,77.6871585';
+//   endLoc[4] = '12.9200267,77.6961266';
 
  var waypoints = new Array();
- waypoints[0] = [];
- waypoints[1] = [];
- waypoints[2] = [];
- waypoints[3] = [];
- waypoints[4] = [
+//  waypoints[0] = [];
+//  waypoints[1] = [];
+//  waypoints[2] = [];
+//  waypoints[3] = [];
+
+ waypoints[0] = [
 
           {
-            location: new google.maps.LatLng(12.9180891,77.6968655),
+            location: new google.maps.LatLng(12.9294515,77.6947868),
             stopover: true,
           },
           {
-            location: new google.maps.LatLng(12.9181152,77.696821),
-            stopover: true,
-          },
-          {
-            location: new google.maps.LatLng(12.9188366,77.6963717),
-            stopover: true,
-          },
-          {
-            location: new google.maps.LatLng(12.9182374,77.6951095),
+            location: new google.maps.LatLng(12.9319719,77.6961972),
             stopover: true,
           }
-        ]
+        ];
+
+
 
 
 var cascadiaFault = new google.maps.Polyline({
     path: [
-    new google.maps.LatLng(12.9295876, 77.6923302),
-    new google.maps.LatLng(12.9299929, 77.6919232)
+    new google.maps.LatLng(12.9294515,77.6947868),
+    new google.maps.LatLng(12.9319719,77.6961972)
     ]
   });
 
@@ -184,7 +181,8 @@ function createMarker(latlng, label, html, movingMarker, wayPoint) {
           div.style.cursor = 'pointer';
           div.style.width = '20px';
           div.style.height = '20px';
-          div.style.background = 'blue';
+          div.style.borderRadius = '20px';
+          div.style.background = 'red';
 
           if (typeof(self.args.marker_id) !== 'undefined') {
               div.dataset.marker_id = self.args.marker_id;
@@ -241,7 +239,7 @@ function createMarker(latlng, label, html, movingMarker, wayPoint) {
     };
 
         for(var j = 0; j< waypoints[i].length;j++){
-            createMarker(waypoints[i][j][property], undefined , '', false, true);
+            createMarker(waypoints[i][j]['location'], undefined , '', false, true);
         }
 
         directionsService.route(request,makeRouteCallback(i,directionsDisplay[i]));
@@ -302,11 +300,11 @@ function createMarker(latlng, label, html, movingMarker, wayPoint) {
               if (i == 0) { 
                 startLocation[routeNum].latlng = legs[i].start_location;
                 startLocation[routeNum].address = legs[i].start_address;
-                  var overlay = new CustomMarker(
-                      legs[i].start_location,
-                      map,
-                      {}
-                  );
+                //   var overlay = new CustomMarker(
+                //       legs[i].start_location,
+                //       map,
+                //       {}
+                //   );
 
                 // marker = google.maps.Marker({map:map,position: startLocation.latlng});
                 marker[routeNum] = createMarker(legs[i].start_location,undefined,legs[i].start_address, true, false);
@@ -367,7 +365,7 @@ function checkifWayPoint(p,index){
 
     var myPosition = new google.maps.LatLng(p.lat(), p.lng());
 
-    if (google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadiaFault, 0.0007)) {
+    if (google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadiaFault, 0.001)) {
     return true;
     }
 }
@@ -388,6 +386,11 @@ function animate(index,d) {
 
    var wayPoint = checkifWayPoint(p,index);
    if(wayPoint){
+    var overlay = new CustomMarker(
+        p,
+        map,
+        {}
+        );
     waypoints[index].isDelayed=false;
     marker[index].setPosition(p);
     updatePoly(index,d);
