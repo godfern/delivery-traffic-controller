@@ -3,6 +3,7 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker, BicyclingLayer, Directi
 import { compose, withProps, lifecycle } from "recompose";
 import logo from './logo.svg';
 import './App.css';
+import './App.css';
 
 const google = window.google;
 

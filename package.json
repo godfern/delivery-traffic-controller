@@ -1,9 +1,8 @@
 {
-	"name":"Google-Map-Mover-Demo",
+	"name": "Google-Map-Mover-Demo",
 	"description": "Um, yeah",
-	"version":"0.0.1",
+	"version": "0.0.1",
 	"dependencies": {
-		"express":"3.2"	
+		"express": "3.2"
 	}
-	
 }
