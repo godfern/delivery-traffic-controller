@@ -53,6 +53,10 @@ body{height:100%;margin:0px;font-family: Helvetica,Arial;}
   endLoc[4] = '12.9200267,77.6961266';
 
  var waypoints = new Array();
+ waypoints[0] = [];
+ waypoints[1] = [];
+ waypoints[2] = [];
+ waypoints[3] = [];
  waypoints[4] = [
 
           {
@@ -176,8 +180,9 @@ function setRoutes(){
         waypoints: waypoints[i]
     };
 
-    createMarker(new google.maps.LatLng(12.9295876, 77.6923302), undefined , '', false, true);
-    createMarker(new google.maps.LatLng(12.9299929, 77.6919232), undefined , '', false, true);
+        for(var j = 0; j< waypoints[i].length;j++){
+            createMarker(waypoints[i][j][property], undefined , '', false, true);
+        }
 
         directionsService.route(request,makeRouteCallback(i,directionsDisplay[i]));
 
@@ -215,16 +220,25 @@ function setRoutes(){
             // For each route, display summary information.
             var path = response.routes[0].overview_path;
             var legs = response.routes[0].legs,
-                endLocLat = endLoc[0].split(',');
-                createMarker(legs[0].start_location, 'A', legs[0].start_address, false, false);
-                createMarker(new google.maps.LatLng(endLocLat[0], endLocLat[1]), 'B', '', false, false);
+
+
             disp = new google.maps.DirectionsRenderer(rendererOptions);
             disp.setMap(map);
             disp.setDirections(response);
 
+            for(var starti=0; starti< startLoc.length; starti++){
+                var startLocLat = startLoc[starti].split(',');
+                createMarker(new google.maps.LatLng(startLocLat[0], startLocLat[1]), 'A', '', false, false);
+            }
+
+            for(var endi=0; endi<endLoc.length; endi++){
+                var endLocLat = endLoc[endi].split(',');
+                createMarker(new google.maps.LatLng(endLocLat[0], endLocLat[1]), 'B', '', false, false);
+            }
 
             //Markers               
             for (i=0;i<legs.length;i++) {
+
               if (i == 0) { 
                 startLocation[routeNum].latlng = legs[i].start_location;
                 startLocation[routeNum].address = legs[i].start_address;
