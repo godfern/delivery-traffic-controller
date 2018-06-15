@@ -10,7 +10,10 @@ app.get('/', function(req, res) {
 	
 	res.sendfile(__dirname+"/views/index.html");
 });
+app.get('/services', function(req, res) {
 
+    res.sendfile(__dirname+"/views/index1.html");
+});
 app.get('/markers', function(req, res) {
 	res.send(JSON.stringify(markerData.getMarkers()));
 });
