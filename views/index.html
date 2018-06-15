@@ -39,16 +39,51 @@ body{height:100%;margin:0px;font-family: Helvetica,Arial;}
   var nextPanoId;
   
   var startLoc = new Array();
-  startLoc[0] = '12.9314472,77.6950325';
-//   startLoc[1] = '12.9306147,77.6899482';
-//   startLoc[2] = '12.9303388,77.6887636';
-//   startLoc[3] = '12.930297,77.6896364';
+  startLoc[0] = '12.934604,77.6905293';
+  startLoc[1] = '12.9280701,77.6891265';
+  startLoc[2] = '12.9224928,77.6874592';
+  startLoc[3] = '12.9249175,77.6737694';
+  startLoc[4] = '12.9180055,77.694068';
 
   var endLoc = new Array();
-  endLoc[0] = '13.0076686,77.5498198';
-//   endLoc[1] = '12.9281472,77.6884221';
-//   endLoc[2] = '12.9306147,77.6899482';
-//   endLoc[3] = '12.9314472,77.6950325';
+  endLoc[0] = '12.9283843,77.6940812';
+  endLoc[1] = '12.9269326,77.6891817';
+  endLoc[2] = '12.9296516,77.6886793';
+  endLoc[3] = '12.9291333,77.6871585';
+  endLoc[4] = '12.9200267,77.6961266';
+
+ var waypoints = new Array();
+ waypoints[4] = [
+
+          {
+            location: new google.maps.LatLng(12.9180891,77.6968655),
+            stopover: true,
+          },
+          {
+            location: new google.maps.LatLng(12.9181152,77.696821),
+            stopover: true,
+          },
+          {
+            location: new google.maps.LatLng(12.9188366,77.6963717),
+            stopover: true,
+          },
+          {
+            location: new google.maps.LatLng(12.9182374,77.6951095),
+            stopover: true,
+          }
+        ]
+
+
+var cascadiaFault = new google.maps.Polyline({
+    path: [
+    new google.maps.LatLng(12.9295876, 77.6923302),
+    new google.maps.LatLng(12.9299929, 77.6919232)
+    ]
+  });
+
+  cascadiaFault.setMap(map);
+ 
+ 
 
   var strokeColor = new Array();
   strokeColor[0] = 'black';
@@ -138,16 +173,7 @@ function setRoutes(){
         origin: startLoc[i],
         destination: endLoc[i],
         travelMode: travelMode,
-        waypoints: [
-          {
-            location: new google.maps.LatLng(12.9295876, 77.6923302),
-            stopover: true
-          },
-          {
-            location: new google.maps.LatLng(12.9299929, 77.6919232),
-            stopover: true
-          }
-        ]
+        waypoints: waypoints[i]
     };
 
     createMarker(new google.maps.LatLng(12.9295876, 77.6923302), undefined , '', false, true);
@@ -236,7 +262,7 @@ function setRoutes(){
     var lastVertex = 1;
     var stepnum=0;
     var step = 50; // 5; // metres
-    var tick = 100; // milliseconds
+    var tick = 500; // milliseconds
     var eol= [];
 //----------------------------------------------------------------------                
  function updatePoly(i,d) {
@@ -256,8 +282,21 @@ function setRoutes(){
     }
  }
 //----------------------------------------------------------------------------
+function checkifWayPoint(p,index){
+    
+
+    var myPosition = new google.maps.LatLng(p.lat(), p.lng());
+
+    if (google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadiaFault, 0.0007)) {
+    return true;
+    }
+}
+
+
+//----------------------------------------------------------------------------
 
 function animate(index,d) {
+
    if (d>eol[index]) {
 
       marker[index].setPosition(endLocation[index].latlng);
@@ -266,9 +305,21 @@ function animate(index,d) {
     var p = polyline[index].GetPointAtDistance(d);
 
     //map.panTo(p);
+
+   var wayPoint = checkifWayPoint(p,index);
+   if(wayPoint){
+    waypoints[index].isDelayed=false;
     marker[index].setPosition(p);
     updatePoly(index,d);
+    
+    timerHandle[index] = setTimeout("animate("+index+","+(d+step)+")", tick+3000);
+   }else{
+    marker[index].setPosition(p);
+    updatePoly(index,d);
+    
     timerHandle[index] = setTimeout("animate("+index+","+(d+step)+")", tick);
+   }
+    
 }
 
 //-------------------------------------------------------------------------
